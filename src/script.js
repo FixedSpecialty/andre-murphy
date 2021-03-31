@@ -38,9 +38,27 @@ gltfLoader.load(
     '/models/OldPC/scene.gltf',
     (gltf) =>
     {
-        scene.add(gltf.scene)
+        const pcmodel = gltf.scene
+        pcmodel.scale = .5
+        scene.add(pcmodel)
+
     }
 )
+let mixer = null
+gltfLoader.load(
+    '/models/combined/scene.gltf',
+    (gltf) =>
+    {
+        const office = gltf.scene
+        scene.add(office)
+
+        const mixer = new THREE.AnimationMixer(office)
+
+        const action = mixer.clipAction(gltf.animations[0])
+        action.play()
+    }
+)
+
 
 // Debug
 const gui = new dat.GUI()
@@ -146,11 +164,11 @@ backwallR.position.z = -17
  * Window
  */
 
- scene.add(desktop, frLeg, flLeg, blLeg, brLeg,floor, backwallB, backwallT, backwallL, backwallR)
+ //scene.add(desktop, frLeg, flLeg, blLeg, brLeg,floor, backwallB, backwallT, backwallL, backwallR)
 /**
  * Lights
  */
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.4)
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
 scene.add(ambientLight)
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6)
@@ -192,7 +210,7 @@ window.addEventListener('resize', () =>
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.set(2, 2, 2)
+camera.position.set(0, 2.5, 6)
 scene.add(camera)
 
 // Controls
@@ -215,13 +233,15 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  * Animate
  */
 const clock = new THREE.Clock()
-let previousTime = 0
 
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
-    const deltaTime = elapsedTime - previousTime
-    previousTime = elapsedTime
+    console.log(mixer)
+    if(mixer)
+    {
+        mixer.update(clock.getDelta())
+    }
 
     // Update controls
     controls.update()
