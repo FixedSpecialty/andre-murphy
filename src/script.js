@@ -17,17 +17,23 @@ const deskMat = new THREE.MeshStandardMaterial({
     roughness: 0.5
 })
 
+const floorMat = new THREE.MeshStandardMaterial({
+    color: '#422',
+    metalness: 0,
+    roughness: 0.5
+})
+
+const windowMat = new THREE.MeshStandardMaterial({
+    color: '#433',
+    metalness: 0,
+    roughness: 0.5
+})
+
+
 /**
  * Models
  */
  const gltfLoader = new GLTFLoader()
- gltfLoader.load(
-    '/models/Duck/glTF/Duck.gltf',
-    (gltf) =>
-    {
-        console.log(gltf)
-    }
-)
 gltfLoader.load(
     '/models/OldPC/scene.gltf',
     (gltf) =>
@@ -50,11 +56,7 @@ const scene = new THREE.Scene()
  */
 const desktop = new THREE.Mesh(
     new THREE.BoxGeometry(5, 10,0.3),
-    new THREE.MeshStandardMaterial({
-        color: '#444444',
-        metalness: 0,
-        roughness: 0.5
-    })
+    deskMat
 )
 desktop.receiveShadow = true
 desktop.rotation.x = - Math.PI * 0.5
@@ -66,43 +68,89 @@ desktop.position.x = 0.5
  */
  const flLeg = new THREE.Mesh(
     new THREE.BoxGeometry(.3, 3,0.3),
-    new THREE.MeshStandardMaterial({
-        color: '#444444',
-        metalness: 0,
-        roughness: 0.5
-    })
+    deskMat
 )
+flLeg.position.set(2.85,-1.75,4.85)
+
 const frLeg = new THREE.Mesh(
     new THREE.BoxGeometry(.3, 3,0.3),
-    new THREE.MeshStandardMaterial({
-        color: '#444444',
-        metalness: 0,
-        roughness: 0.5
-    })
+    deskMat
 )
+frLeg.position.x = 2.85
+frLeg.position.set(2.85,-1.75,-4.85)
+
 const blLeg = new THREE.Mesh(
     new THREE.BoxGeometry(.3, 3,0.3),
-    new THREE.MeshStandardMaterial({
-        color: '#444444',
-        metalness: 0,
-        roughness: 0.5
-    })
+    deskMat
 )
+blLeg.position.x = 2.85
+blLeg.position.set(-1.85,-1.75,4.85)
+
 const brLeg = new THREE.Mesh(
     new THREE.BoxGeometry(.3, 3,0.3),
-    new THREE.MeshStandardMaterial({
-        color: '#444444',
-        metalness: 0,
-        roughness: 0.5
-    })
+    deskMat
 )
+brLeg.position.x = 2.85
+brLeg.position.set(-1.85,-1.75,-4.85)
 
-scene.add(desktop, frLeg, flLeg, blLeg, brLeg)
 
+
+/**
+ * Floor
+ */
+const floor = new THREE.Mesh(
+    new THREE.PlaneGeometry(8,45),
+    floorMat
+)
+floor.rotation.x = - Math.PI * 0.5
+floor.position.y = -3
+floor.position.x = 2
+
+/**
+ * Walls
+ */
+ const backwallB = new THREE.Mesh(
+    new THREE.PlaneGeometry(45,4),
+    floorMat
+)
+backwallB.rotation.y =  Math.PI * 0.5
+backwallB.position.y = -1
+backwallB.position.x = -2
+
+const backwallT = new THREE.Mesh(
+    new THREE.PlaneGeometry(45,4),
+    floorMat
+)
+backwallT.rotation.y =  Math.PI * 0.5
+backwallT.position.y = 6.5
+backwallT.position.x = -2
+
+const backwallL = new THREE.Mesh(
+    new THREE.PlaneGeometry(24,3.5),
+    floorMat
+)
+backwallL.rotation.y =  Math.PI * 0.5
+backwallL.position.y = 2.75
+backwallL.position.x = -2
+backwallL.position.z = 11
+
+const backwallR = new THREE.Mesh(
+    new THREE.PlaneGeometry(24,3.5),
+    floorMat
+)
+backwallR.rotation.y =  Math.PI * 0.5
+backwallR.position.y = 2.75
+backwallR.position.x = -2
+backwallR.position.z = -17
+/**
+ * Window
+ */
+
+ scene.add(desktop, frLeg, flLeg, blLeg, brLeg,floor, backwallB, backwallT, backwallL, backwallR)
 /**
  * Lights
  */
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.8)
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.4)
 scene.add(ambientLight)
 
 const directionalLight = new THREE.DirectionalLight(0xffffff, 0.6)
