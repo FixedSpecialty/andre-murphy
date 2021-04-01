@@ -12,17 +12,17 @@ const delay = 2000
  const manager = new THREE.LoadingManager()
     manager.onStart = () =>
     {
-        console.log("loading started")
+       // console.log("loading started")
         document.getElementById('wrapper').style.display = "block"
     }
     manager.onProgress = () =>
     {
-        console.log("working")
+       // console.log("working")
         document.getElementById('wrapper').style.display = "block"
     }
     manager.onLoad = () =>
     {
-        console.log("loading finished")
+       // console.log("loading finished")
         setTimeout(() =>
         {
             delay
