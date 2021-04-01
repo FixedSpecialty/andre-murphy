@@ -14,10 +14,6 @@ const delay = 6000
     {
        // console.log("loading started")
         document.getElementById('wrapper').style.display = "block"
-     setTimeout(() =>
-        {
-            delay
-        })
     }
     manager.onProgress = () =>
     {
@@ -31,7 +27,7 @@ const delay = 6000
         {
             delay
         })
-        document.getElementById('wrapper').style.display = "none"
+       // document.getElementById('wrapper').style.display = "none"
     }
 
 /**
