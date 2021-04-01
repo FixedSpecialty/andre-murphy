@@ -8,7 +8,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 /**
  * Base
  */
-const delay = 2000
+const delay = 6000
  const manager = new THREE.LoadingManager()
     manager.onStart = () =>
     {
