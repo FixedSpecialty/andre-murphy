@@ -8,7 +8,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 /**
  * Base
  */
-const delay = 6000
+const delay = 3000
  const manager = new THREE.LoadingManager()
     manager.onStart = () =>
     {
@@ -27,7 +27,7 @@ const delay = 6000
         {
             delay
         })
-       // document.getElementById('wrapper').style.display = "none"
+       document.getElementById('wrapper').style.display = "none"
     }
 
 /**
@@ -165,9 +165,4 @@ const tick = () => {
     window.requestAnimationFrame(tick)
 }
 
-function onTransitionEnd(event) {
-
-    event.target.remove();
-
-}
 tick()
