@@ -8,19 +8,25 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 /**
  * Base
  */
+const delay = 2000
  const manager = new THREE.LoadingManager()
     manager.onStart = () =>
     {
-        //console.log("loading started")
+        console.log("loading started")
         document.getElementById('wrapper').style.display = "block"
     }
-    manager.onProgress = (url, itemsLoaded) =>
+    manager.onProgress = () =>
     {
-        //console.log("loading file:" + url + '.\nLoaded' + itemsLoaded)
+        console.log("working")
+        document.getElementById('wrapper').style.display = "block"
     }
     manager.onLoad = () =>
     {
-        //console.log("loading finished")
+        console.log("loading finished")
+        setTimeout(() =>
+        {
+            delay
+        })
         document.getElementById('wrapper').style.display = "none"
     }
 
