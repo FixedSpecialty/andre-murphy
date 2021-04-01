@@ -1,4 +1,4 @@
-# Three.js Journey
+# A 3d resume website created using Three.js
 
 ## Setup
 Download [Node.js](https://nodejs.org/en/download/).
