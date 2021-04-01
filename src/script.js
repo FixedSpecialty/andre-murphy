@@ -4,51 +4,56 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'dat.gui'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 
+
 /**
  * Base
  */
+ const manager = new THREE.LoadingManager()
+    manager.onStart = () =>
+    {
+        //console.log("loading started")
+        document.getElementById('wrapper').style.display = "block"
+    }
+    manager.onProgress = (url, itemsLoaded) =>
+    {
+        //console.log("loading file:" + url + '.\nLoaded' + itemsLoaded)
+    }
+    manager.onLoad = () =>
+    {
+        //console.log("loading finished")
+        document.getElementById('wrapper').style.display = "none"
+    }
 
 /**
  * Materials
  */
-const deskMat = new THREE.MeshStandardMaterial({
-    color: '#444444',
-    metalness: 0,
-    roughness: 0.5
-})
+// const deskMat = new THREE.MeshStandardMaterial({
+//     color: '#444444',
+//     metalness: 0,
+//     roughness: 0.5
+// })
 
-const floorMat = new THREE.MeshStandardMaterial({
-    color: '#422',
-    metalness: 0,
-    roughness: 0.5
-})
+// const floorMat = new THREE.MeshStandardMaterial({
+//     color: '#422',
+//     metalness: 0,
+//     roughness: 0.5
+// })
 
-const windowMat = new THREE.MeshStandardMaterial({
-    color: '#433',
-    metalness: 0,
-    roughness: 0.5
-})
+// const windowMat = new THREE.MeshStandardMaterial({
+//     color: '#433',
+//     metalness: 0,
+//     roughness: 0.5
+// })
 
 
 /**
  * Models
  */
- const gltfLoader = new GLTFLoader()
-gltfLoader.load(
-    '/models/OldPC/scene.gltf',
-    (gltf) =>
-    {
-        const pcmodel = gltf.scene
-        pcmodel.scale = .5
-        scene.add(pcmodel)
-
-    }
-)
+const gltfLoader = new GLTFLoader(manager)
 let mixer = null
 gltfLoader.load(
     '/models/combined/scene.gltf',
-    (gltf) =>
-    {
+    (gltf) => {
         const office = gltf.scene
         scene.add(office)
 
@@ -62,6 +67,7 @@ gltfLoader.load(
 
 // Debug
 const gui = new dat.GUI()
+gui.destroy()
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -69,102 +75,6 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
-/**
- * Desktop
- */
-const desktop = new THREE.Mesh(
-    new THREE.BoxGeometry(5, 10,0.3),
-    deskMat
-)
-desktop.receiveShadow = true
-desktop.rotation.x = - Math.PI * 0.5
-desktop.position.y = -.1
-desktop.position.x = 0.5
-
-/**
- * Desk Legs
- */
- const flLeg = new THREE.Mesh(
-    new THREE.BoxGeometry(.3, 3,0.3),
-    deskMat
-)
-flLeg.position.set(2.85,-1.75,4.85)
-
-const frLeg = new THREE.Mesh(
-    new THREE.BoxGeometry(.3, 3,0.3),
-    deskMat
-)
-frLeg.position.x = 2.85
-frLeg.position.set(2.85,-1.75,-4.85)
-
-const blLeg = new THREE.Mesh(
-    new THREE.BoxGeometry(.3, 3,0.3),
-    deskMat
-)
-blLeg.position.x = 2.85
-blLeg.position.set(-1.85,-1.75,4.85)
-
-const brLeg = new THREE.Mesh(
-    new THREE.BoxGeometry(.3, 3,0.3),
-    deskMat
-)
-brLeg.position.x = 2.85
-brLeg.position.set(-1.85,-1.75,-4.85)
-
-
-
-/**
- * Floor
- */
-const floor = new THREE.Mesh(
-    new THREE.PlaneGeometry(8,45),
-    floorMat
-)
-floor.rotation.x = - Math.PI * 0.5
-floor.position.y = -3
-floor.position.x = 2
-
-/**
- * Walls
- */
- const backwallB = new THREE.Mesh(
-    new THREE.PlaneGeometry(45,4),
-    floorMat
-)
-backwallB.rotation.y =  Math.PI * 0.5
-backwallB.position.y = -1
-backwallB.position.x = -2
-
-const backwallT = new THREE.Mesh(
-    new THREE.PlaneGeometry(45,4),
-    floorMat
-)
-backwallT.rotation.y =  Math.PI * 0.5
-backwallT.position.y = 6.5
-backwallT.position.x = -2
-
-const backwallL = new THREE.Mesh(
-    new THREE.PlaneGeometry(24,3.5),
-    floorMat
-)
-backwallL.rotation.y =  Math.PI * 0.5
-backwallL.position.y = 2.75
-backwallL.position.x = -2
-backwallL.position.z = 11
-
-const backwallR = new THREE.Mesh(
-    new THREE.PlaneGeometry(24,3.5),
-    floorMat
-)
-backwallR.rotation.y =  Math.PI * 0.5
-backwallR.position.y = 2.75
-backwallR.position.x = -2
-backwallR.position.z = -17
-/**
- * Window
- */
-
- //scene.add(desktop, frLeg, flLeg, blLeg, brLeg,floor, backwallB, backwallT, backwallL, backwallR)
 /**
  * Lights
  */
@@ -190,8 +100,7 @@ const sizes = {
     height: window.innerHeight
 }
 
-window.addEventListener('resize', () =>
-{
+window.addEventListener('resize', () => {
     // Update sizes
     sizes.width = window.innerWidth
     sizes.height = window.innerHeight
@@ -234,12 +143,9 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  */
 const clock = new THREE.Clock()
 
-const tick = () =>
-{
+const tick = () => {
     const elapsedTime = clock.getElapsedTime()
-    console.log(mixer)
-    if(mixer)
-    {
+    if (mixer) {
         mixer.update(clock.getDelta())
     }
 
@@ -253,4 +159,9 @@ const tick = () =>
     window.requestAnimationFrame(tick)
 }
 
+function onTransitionEnd(event) {
+
+    event.target.remove();
+
+}
 tick()
